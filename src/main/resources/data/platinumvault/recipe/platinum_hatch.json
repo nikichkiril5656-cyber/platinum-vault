@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "create:item_hatch"
+    },
+    {
+      "item": "createpropulsion:platinum_sheet"
+    }
+  ],
+  "result": {
+    "id": "platinumvault:platinum_hatch",
+    "count": 1
+  }
+}

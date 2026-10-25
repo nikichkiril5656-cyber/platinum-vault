@@ -4,6 +4,8 @@ import com.simibubi.create.api.contraption.storage.item.MountedItemStorageType;
 import com.simibubi.create.api.registry.CreateRegistries;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.inventory.MenuType;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -41,8 +43,34 @@ public class ModRegistry {
 		() -> CreativeModeTab.builder()
 			.title(Component.translatable("itemGroup.platinumvault.main"))
 			.icon(() -> new ItemStack(ModRegistry.PLATINUM_VAULT_ITEM.get()))
-			.displayItems((params, output) -> output.accept(ModRegistry.PLATINUM_VAULT_ITEM.get()))
+			.displayItems((params, output) -> {
+				output.accept(ModRegistry.PLATINUM_VAULT_ITEM.get());
+				output.accept(ModRegistry.PLATINUM_HATCH_ITEM.get());
+			})
 			.build());
+
+	private static final DeferredRegister<MenuType<?>> MENUS =
+		DeferredRegister.create(Registries.MENU, PlatinumVaultMod.MOD_ID);
+
+	public static final DeferredHolder<MenuType<?>, MenuType<PlatinumHatchMenu>> PLATINUM_HATCH_MENU =
+		MENUS.register("platinum_hatch", () -> IMenuTypeExtension.create((id, inv, buf) -> new PlatinumHatchMenu(id, inv)));
+
+	public static final DeferredBlock<PlatinumHatchBlock> PLATINUM_HATCH = BLOCKS.register("platinum_hatch",
+		() -> new PlatinumHatchBlock(BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_LIGHT_BLUE)
+			.strength(3.0f, 6f)
+			.requiresCorrectToolForDrops()
+			.noOcclusion()
+			.sound(SoundType.NETHERITE_BLOCK)));
+
+	public static final DeferredItem<net.minecraft.world.item.BlockItem> PLATINUM_HATCH_ITEM = ITEMS.register("platinum_hatch",
+		() -> new net.minecraft.world.item.BlockItem(PLATINUM_HATCH.get(), new Item.Properties()));
+
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PlatinumHatchBlockEntity>> PLATINUM_HATCH_BE =
+		BLOCK_ENTITIES.register("platinum_hatch",
+			() -> BlockEntityType.Builder.of(
+				(pos, state) -> new PlatinumHatchBlockEntity(ModRegistry.PLATINUM_HATCH_BE.get(), pos, state),
+				PLATINUM_HATCH.get()).build(null));
 
 	public static final DeferredBlock<PlatinumVaultBlock> PLATINUM_VAULT = BLOCKS.register("platinum_item_vault",
 		() -> new PlatinumVaultBlock(BlockBehaviour.Properties.of()
@@ -66,6 +94,7 @@ public class ModRegistry {
 		BLOCK_ENTITIES.register(bus);
 		MOUNTED_STORAGE_TYPES.register(bus);
 		TABS.register(bus);
+		MENUS.register(bus);
 		bus.addListener(ModRegistry::addToTabs);
 	}
 

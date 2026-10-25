@@ -17,7 +17,7 @@ public class PlatinumVaultMod {
 		modBus.addListener(PlatinumVaultMod::registerCapabilities);
 		modBus.addListener((FMLCommonSetupEvent e) -> e.enqueueWork(CreateIntegration::setup));
 		if (FMLEnvironment.dist == Dist.CLIENT)
-			ClientSetup.init();
+			ClientSetup.init(modBus);
 	}
 
 	private static void registerCapabilities(RegisterCapabilitiesEvent event) {
