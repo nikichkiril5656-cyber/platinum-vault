@@ -1,1 +1,4 @@
-{ "block.platinumvault.platinum_item_vault": "Platinum Item Vault" }
+{
+  "block.platinumvault.platinum_item_vault": "Platinum Item Vault",
+  "itemGroup.platinumvault.main": "Platinum Storage"
+}

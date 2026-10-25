@@ -5,6 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
+import com.simibubi.create.api.packager.InventoryIdentifier;
 import com.simibubi.create.foundation.ICapabilityProvider;
 import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -28,6 +29,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -40,6 +42,7 @@ public class PlatinumVaultBlockEntity extends SmartBlockEntity
 
 	protected ICapabilityProvider<IItemHandler> itemCapability = null;
 	protected ItemStackHandler inventory;
+	protected InventoryIdentifier invId;
 	protected BlockPos controller;
 	protected BlockPos lastKnownPos;
 	protected boolean updateConnectivity;
@@ -217,6 +220,17 @@ public class PlatinumVaultBlockEntity extends SmartBlockEntity
 		return inventory;
 	}
 
+	public void applyInventoryToBlock(ItemStackHandler handler) {
+		for (int i = 0; i < inventory.getSlots(); i++)
+			inventory.setStackInSlot(i, i < handler.getSlots() ? handler.getStackInSlot(i) : ItemStack.EMPTY);
+	}
+
+	public InventoryIdentifier getInvId() {
+		// сначала актуализируем способность, она же задаёт идентификатор
+		initCapability();
+		return invId;
+	}
+
 	private void initCapability() {
 		if (itemCapability != null && itemCapability.getCapability() != null)
 			return;
@@ -230,6 +244,7 @@ public class PlatinumVaultBlockEntity extends SmartBlockEntity
 					return null;
 				return controllerBE.itemCapability.getCapability();
 			});
+			invId = controllerBE.invId;
 			return;
 		}
 
@@ -245,6 +260,11 @@ public class PlatinumVaultBlockEntity extends SmartBlockEntity
 						at != null ? at.inventory : new ItemStackHandler(inventory.getSlots());
 				}
 		itemCapability = ICapabilityProvider.of(new VersionedInventoryWrapper(SameSizeCombinedInvWrapper.create(invs)));
+
+		// идентификатор, охватывающий все блоки мультиблока
+		BlockPos farCorner = alongZ ? worldPosition.offset(radius, radius, length)
+			: worldPosition.offset(length, radius, radius);
+		invId = new InventoryIdentifier.Bounds(BoundingBox.fromCorners(worldPosition, farCorner));
 	}
 
 	public static int getMaxLength(int radius) {

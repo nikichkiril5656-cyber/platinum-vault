@@ -1,1 +1,4 @@
-{ "block.platinumvault.platinum_item_vault": "Платиновое хранилище предметов" }
+{
+  "block.platinumvault.platinum_item_vault": "Платиновое хранилище предметов",
+  "itemGroup.platinumvault.main": "Платиновое хранилище"
+}

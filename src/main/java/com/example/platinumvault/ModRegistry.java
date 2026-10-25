@@ -1,6 +1,11 @@
 package com.example.platinumvault;
 
+import com.simibubi.create.api.contraption.storage.item.MountedItemStorageType;
+import com.simibubi.create.api.registry.CreateRegistries;
+
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -23,6 +28,22 @@ public class ModRegistry {
 	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
 		DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, PlatinumVaultMod.MOD_ID);
 
+	private static final DeferredRegister<MountedItemStorageType<?>> MOUNTED_STORAGE_TYPES =
+		DeferredRegister.create(CreateRegistries.MOUNTED_ITEM_STORAGE_TYPE, PlatinumVaultMod.MOD_ID);
+
+	public static final DeferredHolder<MountedItemStorageType<?>, PlatinumVaultMountedStorageType> PLATINUM_VAULT_MOUNTED_STORAGE =
+		MOUNTED_STORAGE_TYPES.register("platinum_item_vault", PlatinumVaultMountedStorageType::new);
+
+	private static final DeferredRegister<CreativeModeTab> TABS =
+		DeferredRegister.create(Registries.CREATIVE_MODE_TAB, PlatinumVaultMod.MOD_ID);
+
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_TAB = TABS.register("main",
+		() -> CreativeModeTab.builder()
+			.title(Component.translatable("itemGroup.platinumvault.main"))
+			.icon(() -> new ItemStack(ModRegistry.PLATINUM_VAULT_ITEM.get()))
+			.displayItems((params, output) -> output.accept(ModRegistry.PLATINUM_VAULT_ITEM.get()))
+			.build());
+
 	public static final DeferredBlock<PlatinumVaultBlock> PLATINUM_VAULT = BLOCKS.register("platinum_item_vault",
 		() -> new PlatinumVaultBlock(BlockBehaviour.Properties.of()
 			.mapColor(MapColor.COLOR_LIGHT_BLUE)
@@ -43,6 +64,8 @@ public class ModRegistry {
 		BLOCKS.register(bus);
 		ITEMS.register(bus);
 		BLOCK_ENTITIES.register(bus);
+		MOUNTED_STORAGE_TYPES.register(bus);
+		TABS.register(bus);
 		bus.addListener(ModRegistry::addToTabs);
 	}
 
