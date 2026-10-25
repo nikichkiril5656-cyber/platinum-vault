@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "horizontal_axis=x,large=false": { "model": "platinumvault:block/platinum_item_vault", "y": 90 },
+    "horizontal_axis=z,large=false": { "model": "platinumvault:block/platinum_item_vault" },
+    "horizontal_axis=x,large=true": { "model": "platinumvault:block/platinum_item_vault_large", "y": 90 },
+    "horizontal_axis=z,large=true": { "model": "platinumvault:block/platinum_item_vault_large" }
+  }
+}
