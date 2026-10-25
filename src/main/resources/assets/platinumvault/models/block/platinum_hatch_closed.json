@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"0": "platinumvault:block/platinum_hatch",
-		"1": "platinumvault:block/platinum_hatch_closed",
+		"0": "create:block/hatch",
+		"1": "create:block/hatch_closed",
 		"particle": "platinumvault:block/vault_side_small"
 	},
 	"elements": [
