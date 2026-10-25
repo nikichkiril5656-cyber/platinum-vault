@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev' version '2.0.141'
+}
+
+version = mod_version
+group = mod_group
+base { archivesName = mod_id }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.createmod.net' }          // Create, Ponder, Flywheel, Catnip
+    maven { url = 'https://mvn.devos.one/snapshots' }      // Registrate
+    maven { url = 'https://cursemaven.com' }               // Propulsion: Simulated
+}
+
+neoForge {
+    version = neo_version
+    mods { "${mod_id}" { sourceSet(sourceSets.main) } }
+    runs {
+        client { client(); systemProperty 'neoforge.enabledGameTestNamespaces', mod_id }
+        server { server(); programArgument '--nogui' }
+    }
+}
+
+dependencies {
+    // Create (6.0.x для 1.21.1). Если координаты не подходят — смотрите актуальные на maven.createmod.net
+    implementation "com.simibubi.create:create-${minecraft_version}:${create_version}:slim"
+    implementation "net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:+"
+    implementation "dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:+"
+    implementation "com.tterrag.registrate:Registrate:+"
+    // Create Propulsion: Simulated 1.1.5 (нужен только для запуска/теста)
+    runtimeOnly "curse.maven:create-propulsion-simulated-1522736:8496246"
+}
+
+processResources {
+    var props = [mod_id: mod_id, mod_name: mod_name, mod_version: mod_version, minecraft_version: minecraft_version]
+    inputs.properties props
+    filesMatching('META-INF/neoforge.mods.toml') { expand props }
+}
