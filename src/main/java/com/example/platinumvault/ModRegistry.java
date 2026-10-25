@@ -36,7 +36,7 @@ public class ModRegistry {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PlatinumVaultBlockEntity>> PLATINUM_VAULT_BE =
 		BLOCK_ENTITIES.register("platinum_item_vault",
 			() -> BlockEntityType.Builder.of(
-				(pos, state) -> new PlatinumVaultBlockEntity(PLATINUM_VAULT_BE.get(), pos, state),
+				(pos, state) -> new PlatinumVaultBlockEntity(ModRegistry.PLATINUM_VAULT_BE.get(), pos, state),
 				PLATINUM_VAULT.get()).build(null));
 
 	public static void register(IEventBus bus) {
