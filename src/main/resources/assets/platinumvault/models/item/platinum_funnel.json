@@ -1,10 +1,11 @@
 {
   "parent": "create:block/funnel/item",
+  "render_type": "minecraft:cutout_mipped",
   "textures": {
-    "base": "create:block/funnel/brass_funnel",
-    "block": "create:block/brass_block",
-    "direction": "create:block/funnel/brass_funnel_neutral",
-    "particle": "create:block/brass_block",
-    "redstone": "create:block/funnel/brass_funnel_unpowered"
+    "base": "platinumvault:block/funnel/platinum_funnel",
+    "block": "platinumvault:block/platinum_block",
+    "direction": "platinumvault:block/funnel/platinum_funnel_neutral",
+    "particle": "platinumvault:block/platinum_block",
+    "redstone": "platinumvault:block/funnel/platinum_funnel_unpowered"
   }
 }

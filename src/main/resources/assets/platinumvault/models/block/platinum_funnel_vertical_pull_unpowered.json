@@ -1,0 +1,12 @@
+{
+  "parent": "create:block/funnel/block_vertical",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "base": "platinumvault:block/funnel/platinum_funnel",
+    "direction": "platinumvault:block/funnel/platinum_funnel_pull",
+    "frame": "platinumvault:block/funnel/platinum_funnel_frame",
+    "open": "create:block/funnel/funnel_open",
+    "particle": "platinumvault:block/platinum_block",
+    "redstone": "platinumvault:block/funnel/platinum_funnel_unpowered"
+  }
+}

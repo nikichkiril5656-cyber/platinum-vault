@@ -1,0 +1,11 @@
+{
+  "parent": "create:block/belt_funnel/block_extended",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "base": "platinumvault:block/funnel/platinum_funnel",
+    "block": "platinumvault:block/platinum_block",
+    "direction": "platinumvault:block/funnel/platinum_funnel_neutral",
+    "particle": "platinumvault:block/platinum_block",
+    "redstone": "platinumvault:block/funnel/platinum_funnel_unpowered"
+  }
+}

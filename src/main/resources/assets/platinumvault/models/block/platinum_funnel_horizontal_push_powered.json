@@ -1,0 +1,11 @@
+{
+  "parent": "create:block/funnel/block_horizontal",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "base": "platinumvault:block/funnel/platinum_funnel",
+    "block": "platinumvault:block/platinum_block",
+    "direction": "platinumvault:block/funnel/platinum_funnel_push",
+    "particle": "platinumvault:block/platinum_block",
+    "redstone": "platinumvault:block/funnel/platinum_funnel_powered"
+  }
+}
