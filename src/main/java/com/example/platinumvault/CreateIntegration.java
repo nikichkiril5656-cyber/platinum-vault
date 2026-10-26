@@ -1,6 +1,8 @@
 package com.example.platinumvault;
 
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.api.contraption.BlockMovementChecks;
+import com.simibubi.create.content.logistics.funnel.FunnelMovementBehaviour;
 import com.simibubi.create.api.contraption.BlockMovementChecks.CheckResult;
 import com.simibubi.create.api.contraption.storage.item.MountedItemStorageType;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
@@ -15,6 +17,10 @@ public class CreateIntegration {
 		// 1. Хранилище на конструкциях: Create должен знать, как «упаковать» наш блок
 		MountedItemStorageType.REGISTRY.register(ModRegistry.PLATINUM_VAULT.get(),
 			ModRegistry.PLATINUM_VAULT_MOUNTED_STORAGE.get());
+
+		// Шлюзы на конструкциях работают как латунные воронки (фильтр учитывается)
+		FunnelMovementBehaviour funnelBehaviour = FunnelMovementBehaviour.brass();
+		MovementBehaviour.REGISTRY.register(ModRegistry.PLATINUM_FUNNEL.get(), funnelBehaviour);
 
 		// Склеенные в мультиблок хранилища двигаются вместе
 		BlockMovementChecks.registerAttachedCheck((state, level, pos, direction) -> {
