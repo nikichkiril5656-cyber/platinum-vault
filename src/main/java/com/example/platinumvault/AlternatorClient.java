@@ -1,8 +1,5 @@
 package com.example.platinumvault;
 
-import com.reggarf.mods.create_better_motors.content.alternator.blocks.AlternatorRenderer;
-import com.reggarf.mods.create_better_motors.content.alternator.blocks.AlternatorVisual;
-
 import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -14,11 +11,11 @@ public final class AlternatorClient {
 
 	public static void init(IEventBus modBus) {
 		modBus.addListener((EntityRenderersEvent.RegisterRenderers e) ->
-			e.registerBlockEntityRenderer(AlternatorModule.PLATINUM_ALTERNATOR_BE.get(), AlternatorRenderer::new));
+			e.registerBlockEntityRenderer(AlternatorModule.PLATINUM_ALTERNATOR_BE.get(), PlatinumAlternatorRenderer::new));
 
 		modBus.addListener((FMLClientSetupEvent e) -> e.enqueueWork(() ->
 			SimpleBlockEntityVisualizer.builder(AlternatorModule.PLATINUM_ALTERNATOR_BE.get())
-				.factory(AlternatorVisual::new)
+				.factory(PlatinumAlternatorVisual::new)
 				.skipVanillaRender(be -> false)
 				.apply()));
 	}
