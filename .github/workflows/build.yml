@@ -15,7 +15,16 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.10.2
-      - run: gradle build --no-daemon
+      - name: Build
+        shell: bash
+        run: |
+          set -o pipefail
+          gradle build --no-daemon 2>&1 | tee build.log
+      - name: Show errors as annotations
+        if: failure()
+        shell: bash
+        run: |
+          grep -E "error:|What went wrong|Could not|FAILED" -A2 build.log | head -40 | while IFS= read -r line; do echo "::error::${line}"; done
       - uses: actions/upload-artifact@v4
         with:
           name: platinum-vault
