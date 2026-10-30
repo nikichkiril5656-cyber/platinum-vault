@@ -49,7 +49,7 @@ public class PlatinumUpgradeItem extends Item {
 
 		Level level = event.getLevel();
 		BlockPos pos = event.getPos();
-		if (PlatinumUpgrades.kindOf(level.getBlockState(pos)) == null)
+		if (!PlatinumUpgrades.canUpgrade(level.getBlockState(pos)))
 			return;
 
 		// на этих блоках улучшение всегда «занимает» клик, даже если улучшить не получилось

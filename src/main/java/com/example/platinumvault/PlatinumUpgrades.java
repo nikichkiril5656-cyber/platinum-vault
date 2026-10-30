@@ -3,6 +3,7 @@ package com.example.platinumvault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -59,7 +60,31 @@ public final class PlatinumUpgrades {
 		TANK, VAULT, FUNNEL
 	}
 
+	/** Улучшение для блока из другого мода (например, генератор Better Motors). Подключается модулем интеграции. */
+	public interface Extension {
+		boolean matches(BlockState state);
+
+		/** Выполняет улучшение на сервере; возвращает true, если блок был заменён. */
+		boolean upgrade(ServerLevel level, BlockPos pos, BlockState state, Player player, ItemStack stack);
+	}
+
+	private static final List<Extension> EXTENSIONS = new CopyOnWriteArrayList<>();
+
 	private PlatinumUpgrades() {}
+
+	public static void register(Extension extension) {
+		EXTENSIONS.add(extension);
+	}
+
+	/** Можно ли улучшить этот блок платиновым улучшением. */
+	public static boolean canUpgrade(BlockState state) {
+		if (kindOf(state) != null)
+			return true;
+		for (Extension extension : EXTENSIONS)
+			if (extension.matches(state))
+				return true;
+		return false;
+	}
 
 	/** Что это за блок с точки зрения улучшения, или null, если улучшать его нечем. */
 	@Nullable
@@ -76,9 +101,15 @@ public final class PlatinumUpgrades {
 	/** Улучшает блок (или весь мультиблок) под курсором. Возвращает true, если блоки были заменены. */
 	public static boolean upgrade(ServerLevel level, BlockPos pos, Player player, ItemStack stack) {
 		BlockState state = level.getBlockState(pos);
-		Kind kind = kindOf(state);
-		if (kind == null || !player.mayBuild())
+		if (!player.mayBuild())
 			return false;
+		Kind kind = kindOf(state);
+		if (kind == null) {
+			for (Extension extension : EXTENSIONS)
+				if (extension.matches(state))
+					return extension.upgrade(level, pos, state, player, stack);
+			return false;
+		}
 		return switch (kind) {
 			case TANK -> upgradeTank(level, pos, state, player, stack);
 			case VAULT -> upgradeVault(level, pos, state, player, stack);
@@ -264,21 +295,21 @@ public final class PlatinumUpgrades {
 
 	// ---- общее ----
 
-	private static boolean canEdit(ServerLevel level, Player player, List<BlockPos> positions) {
+	static boolean canEdit(ServerLevel level, Player player, List<BlockPos> positions) {
 		for (BlockPos p : positions)
 			if (!level.mayInteract(player, p))
 				return false;
 		return true;
 	}
 
-	private static boolean hasEnough(Player player, ItemStack stack, int needed) {
+	static boolean hasEnough(Player player, ItemStack stack, int needed) {
 		if (player.isCreative() || stack.getCount() >= needed)
 			return true;
 		player.displayClientMessage(Component.translatable("message.platinumvault.upgrade.not_enough", needed), true);
 		return false;
 	}
 
-	private static void finish(ServerLevel level, Player player, ItemStack stack, List<BlockPos> positions) {
+	static void finish(ServerLevel level, Player player, ItemStack stack, List<BlockPos> positions) {
 		if (!player.isCreative())
 			stack.shrink(positions.size());
 		level.playSound(null, positions.get(0), SoundEvents.SMITHING_TABLE_USE, SoundSource.BLOCKS, 1.0f, 1.0f);
@@ -292,7 +323,7 @@ public final class PlatinumUpgrades {
 	 * свойства и значения, потому что у платиновых блоков часть свойств объявлена заново.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static BlockState copyProperties(BlockState from, BlockState to) {
+	static BlockState copyProperties(BlockState from, BlockState to) {
 		for (Property<?> source : from.getProperties()) {
 			Property target = to.getBlock().getStateDefinition().getProperty(source.getName());
 			if (target == null)

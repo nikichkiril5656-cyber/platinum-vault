@@ -1,0 +1,15 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:mod_loaded", "modid": "create_better_motors" }
+  ],
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "conditions": [{ "condition": "minecraft:survives_explosion" }],
+      "entries": [{ "type": "minecraft:item", "name": "platinumvault:platinum_alternator" }]
+    }
+  ],
+  "random_sequence": "platinumvault:blocks/platinum_alternator"
+}

@@ -7,5 +7,6 @@
   "item.platinumvault.platinum_upgrade.tooltip.targets": "Бак, латунный шлюз, хранилище предметов",
   "item.platinumvault.platinum_upgrade.tooltip.multiblock": "Баки и хранилища: одно улучшение на каждый блок",
   "message.platinumvault.upgrade.not_enough": "Не хватает улучшений: нужно %s",
-  "message.platinumvault.upgrade.no_tank": "Платиновый бак не найден (установлен ли Create Propulsion?)"
+  "message.platinumvault.upgrade.no_tank": "Платиновый бак не найден (установлен ли Create Propulsion?)",
+  "block.platinumvault.platinum_alternator": "Платиновый генератор переменного тока"
 }

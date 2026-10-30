@@ -33,6 +33,11 @@ dependencies {
     implementation "com.tterrag.registrate:Registrate:+"
     // Create Propulsion: Simulated 1.1.5 (нужен только для запуска/теста)
     runtimeOnly "curse.maven:create-propulsion-simulated-1522736:8496246"
+
+    // Необязательные интеграции: нужны только для компиляции, в игре подхватываются из папки mods
+    compileOnly "curse.maven:create-better-motors-1162812:7430212"   // Create: Better Motors 3.1.9
+    compileOnly "curse.maven:createaddition-439890:8188476"          // Create Crafts & Additions
+    compileOnly "curse.maven:better-library-1150683:7354396"         // Better Library (нужна Better Motors)
 }
 
 processResources {

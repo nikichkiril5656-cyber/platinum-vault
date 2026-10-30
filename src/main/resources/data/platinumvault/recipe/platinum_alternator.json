@@ -1,0 +1,13 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:mod_loaded", "modid": "create_better_motors" }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["S", "A", "S"],
+  "key": {
+    "S": { "item": "createpropulsion:platinum_sheet" },
+    "A": { "item": "create_better_motors:brass_alternator" }
+  },
+  "result": { "id": "platinumvault:platinum_alternator", "count": 1 }
+}

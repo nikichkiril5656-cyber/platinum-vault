@@ -7,5 +7,6 @@
   "item.platinumvault.platinum_upgrade.tooltip.targets": "Fluid Tank, Brass Funnel, Item Vault",
   "item.platinumvault.platinum_upgrade.tooltip.multiblock": "Tanks and vaults use one upgrade per block",
   "message.platinumvault.upgrade.not_enough": "Not enough upgrades: %s needed",
-  "message.platinumvault.upgrade.no_tank": "Platinum Fluid Tank not found (is Create Propulsion installed?)"
+  "message.platinumvault.upgrade.no_tank": "Platinum Fluid Tank not found (is Create Propulsion installed?)",
+  "block.platinumvault.platinum_alternator": "Platinum Alternator"
 }
