@@ -86,6 +86,11 @@ public class ModRegistry {
 		MENUS.register("platinum_funnel",
 			() -> IMenuTypeExtension.create((id, inv, buf) -> new PlatinumFunnelMenu(id, inv)));
 
+	// ---- улучшение ----
+
+	public static final DeferredItem<PlatinumUpgradeItem> PLATINUM_UPGRADE = ITEMS.register("platinum_upgrade",
+		() -> new PlatinumUpgradeItem(new Item.Properties()));
+
 	// ---- вкладка ----
 
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_TAB = TABS.register("main",
@@ -95,6 +100,7 @@ public class ModRegistry {
 			.displayItems((params, output) -> {
 				output.accept(ModRegistry.PLATINUM_VAULT_ITEM.get());
 				output.accept(ModRegistry.PLATINUM_FUNNEL_ITEM.get());
+				output.accept(ModRegistry.PLATINUM_UPGRADE.get());
 			})
 			.build());
 
@@ -113,5 +119,7 @@ public class ModRegistry {
 			event.accept(PLATINUM_VAULT_ITEM.get());
 			event.accept(PLATINUM_FUNNEL_ITEM.get());
 		}
+		if (event.getTabKey() == CreativeModeTabs.INGREDIENTS)
+			event.accept(PLATINUM_UPGRADE.get());
 	}
 }

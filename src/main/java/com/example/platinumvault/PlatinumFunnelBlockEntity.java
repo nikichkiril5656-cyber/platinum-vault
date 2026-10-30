@@ -3,6 +3,9 @@ package com.example.platinumvault;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.slf4j.Logger;
+
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.kinetics.belt.BeltHelper;
 import com.simibubi.create.content.logistics.funnel.BeltFunnelBlock;
 import com.simibubi.create.content.logistics.funnel.FunnelBlock;
@@ -28,8 +31,72 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public class PlatinumFunnelBlockEntity extends FunnelBlockEntity implements MenuProvider {
 
+	private static final Logger LOGGER = LogUtils.getLogger();
+
+	/** Приватная задержка Create между двумя выдачами предметов (в тиках). */
+	private static final Field COOLDOWN_FIELD = findCooldownField();
+
+	/** Для нечётного периода округляем то вверх, то вниз, чтобы в среднем выходило ровно вдвое быстрее. */
+	private boolean roundUp;
+
 	public PlatinumFunnelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
+	}
+
+	private static Field findCooldownField() {
+		try {
+			Field field = FunnelBlockEntity.class.getDeclaredField("extractionCooldown");
+			field.setAccessible(true);
+			return field;
+		} catch (ReflectiveOperationException | RuntimeException e) {
+			LOGGER.error("Не удалось ускорить платиновый шлюз: поле extractionCooldown не найдено", e);
+			return null;
+		}
+	}
+
+	/**
+	 * Платиновый шлюз выдаёт предметы вдвое быстрее латунного. Create после каждой выдачи ставит задержку
+	 * из настройки defaultExtractionTimer; замечаем этот момент и сокращаем период между выдачами вдвое.
+	 */
+	@Override
+	public void tick() {
+		if (COOLDOWN_FIELD == null || level == null || level.isClientSide()) {
+			super.tick();
+			return;
+		}
+		int before = readCooldown();
+		super.tick();
+		int after = readCooldown();
+		// после выдачи Create поднимает задержку с нуля до значения из настроек
+		if (after > before)
+			writeCooldown(shortenedCooldown(after));
+	}
+
+	private int shortenedCooldown(int cooldown) {
+		int period = cooldown + 1; // столько тиков проходит между выдачами у латунного шлюза
+		int half = period / 2;
+		if (period % 2 == 1) {
+			if (roundUp)
+				half++;
+			roundUp = !roundUp;
+		}
+		return Math.max(0, half - 1);
+	}
+
+	private int readCooldown() {
+		try {
+			return COOLDOWN_FIELD.getInt(this);
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	private void writeCooldown(int value) {
+		try {
+			COOLDOWN_FIELD.setInt(this, value);
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	@Override

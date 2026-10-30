@@ -1,5 +1,11 @@
 {
   "block.platinumvault.platinum_item_vault": "Платиновое хранилище предметов",
   "block.platinumvault.platinum_funnel": "Платиновый шлюз",
-  "itemGroup.platinumvault.main": "Платиновое хранилище"
+  "itemGroup.platinumvault.main": "Платиновое хранилище",
+  "item.platinumvault.platinum_upgrade": "Платиновое улучшение",
+  "item.platinumvault.platinum_upgrade.tooltip.use": "ПКМ по блоку, чтобы улучшить его",
+  "item.platinumvault.platinum_upgrade.tooltip.targets": "Бак, латунный шлюз, хранилище предметов",
+  "item.platinumvault.platinum_upgrade.tooltip.multiblock": "Баки и хранилища: одно улучшение на каждый блок",
+  "message.platinumvault.upgrade.not_enough": "Не хватает улучшений: нужно %s",
+  "message.platinumvault.upgrade.no_tank": "Платиновый бак не найден (установлен ли Create Propulsion?)"
 }
